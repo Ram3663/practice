@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <main class="page-shell">
+      <header class="page-header">
+        <p class="eyebrow">Flask workspace</p>
+        <h1>Task Manager</h1>
+        <p class="subtitle">Keep today’s work visible and moving.</p>
+      </header>
+
+      <section class="task-panel" aria-labelledby="add-task-heading">
+        <h2 id="add-task-heading">Add a task</h2>
+        <form class="task-form" method="post" action="{{ url_for('create_task') }}">
+          <label for="title">Task title</label>
+          <div class="form-row">
+            <input id="title" name="title" type="text" maxlength="200" placeholder="What needs to be done?" required>
+            <button type="submit">Add task</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="task-panel" aria-labelledby="task-list-heading">
+        <div class="section-heading">
+          <h2 id="task-list-heading">Your tasks</h2>
+          <span class="task-count">{{ tasks|length }}</span>
+        </div>
+
+        {% if tasks %}
+          <ul class="task-list">
+            {% for task in tasks %}
+              <li class="task-item{% if task['completed'] %} is-complete{% endif %}">
+                <form method="post" action="{{ url_for('complete_task', task_id=task['id']) }}">
+                  <button class="status-button" type="submit" aria-label="Toggle task completion">
+                    {% if task['completed'] %}&#10003;{% else %}&nbsp;{% endif %}
+                  </button>
+                </form>
+                <span class="task-title">{{ task['title'] }}</span>
+                <form method="post" action="{{ url_for('delete_task', task_id=task['id']) }}">
+                  <button class="delete-button" type="submit">Delete</button>
+                </form>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="empty-state">No tasks yet. Add your first one above.</p>
+        {% endif %}
+      </section>
+
+      <footer class="page-footer">
+        <a href="{{ url_for('health') }}">System health</a>
+      </footer>
+    </main>
+  </body>
+</html>
