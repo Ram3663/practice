@@ -1,6 +1,12 @@
 name: Python CI jobs
 
 on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
   workflow_call:
 
 jobs:
