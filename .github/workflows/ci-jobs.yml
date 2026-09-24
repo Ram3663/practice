@@ -1,0 +1,29 @@
+name: Python CI jobs
+
+on:
+  workflow_call:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install CI dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip install ruff pip-audit
+
+      - name: Run lint
+        run: python -m ruff check .
+
+      - name: Run tests
+        run: python -m pytest
+
+      - name: Run security audit
+        run: pip-audit -r requirements.txt
+
+      - name: Build check
+        run: python -m compileall -q app.py templates static
