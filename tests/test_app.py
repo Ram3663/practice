@@ -36,3 +36,19 @@ def test_task_lifecycle(client):
 def test_empty_task_is_ignored(client):
     client.post("/tasks", data={"title": "   "})
     assert b"No tasks yet" in client.get("/").data
+
+
+def test_tasks_can_be_searched_and_filtered(client):
+    client.post("/tasks", data={"title": "Plan release"})
+    client.post("/tasks", data={"title": "Buy groceries"})
+
+    with sqlite3.connect(app.config["DATABASE"]) as database:
+        task_id = database.execute(
+            "SELECT id FROM tasks WHERE title = ?", ("Plan release",)
+        ).fetchone()[0]
+    client.post(f"/tasks/{task_id}/complete")
+
+    response = client.get("/?q=release&status=completed")
+
+    assert b"Plan release" in response.data
+    assert b"Buy groceries" not in response.data

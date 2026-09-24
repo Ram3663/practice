@@ -112,6 +112,42 @@ button {
   background: var(--accent-dark);
 }
 
+.filter-form {
+  margin-bottom: 1.25rem;
+}
+
+.filter-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--muted);
+  font: 0.8rem Arial, sans-serif;
+}
+
+.filter-row {
+  display: flex;
+  gap: 0.6rem;
+}
+
+select,
+.filter-row button {
+  padding: 0 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: white;
+  color: var(--ink);
+  font: 0.9rem Arial, sans-serif;
+}
+
+.filter-row button {
+  border-color: var(--accent);
+  color: white;
+  background: var(--accent);
+}
+
+.filter-row button:hover {
+  background: var(--accent-dark);
+}
+
 .section-heading {
   display: flex;
   align-items: center;
@@ -209,5 +245,15 @@ button {
 
   .form-row button {
     padding: 0.8rem;
+  }
+
+  .filter-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  select,
+  .filter-row button {
+    min-height: 2.75rem;
   }
 }

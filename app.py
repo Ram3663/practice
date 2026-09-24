@@ -53,10 +53,33 @@ def close_db(_error=None):
 @app.get("/")
 def home():
     init_db()
+    search_query = request.args.get("q", "").strip()
+    status_filter = request.args.get("status", "all")
+    if status_filter not in {"all", "active", "completed"}:
+        status_filter = "all"
+
+    filters = []
+    parameters = []
+    if search_query:
+        filters.append("LOWER(title) LIKE LOWER(?)")
+        parameters.append(f"%{search_query}%")
+    if status_filter == "active":
+        filters.append("completed = 0")
+    elif status_filter == "completed":
+        filters.append("completed = 1")
+
+    where_clause = f" WHERE {' AND '.join(filters)}" if filters else ""
     tasks = get_db().execute(
-        "SELECT id, title, completed, created_at FROM tasks ORDER BY completed, id DESC"
+        "SELECT id, title, completed, created_at FROM tasks"
+        f"{where_clause} ORDER BY completed, id DESC",
+        parameters,
     ).fetchall()
-    return render_template("index.html", tasks=tasks)
+    return render_template(
+        "index.html",
+        tasks=tasks,
+        search_query=search_query,
+        status_filter=status_filter,
+    )
 
 
 @app.post("/tasks")
