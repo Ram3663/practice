@@ -119,7 +119,7 @@ def delete_task(task_id):
 
 @app.get("/health")
 def health():
-    return jsonify(status="ok")
+    return jsonify(status="ok", service="task-manager")
 
 
 if __name__ == "__main__":

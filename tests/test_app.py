@@ -38,6 +38,13 @@ def test_empty_task_is_ignored(client):
     assert b"No tasks yet" in client.get("/").data
 
 
+def test_health_check_identifies_service(client):
+    response = client.get("/health")
+
+    assert response.status_code == 200
+    assert response.get_json() == {"status": "ok", "service": "task-manager"}
+
+
 def test_tasks_can_be_searched_and_filtered(client):
     client.post("/tasks", data={"title": "Plan release"})
     client.post("/tasks", data={"title": "Buy groceries"})
