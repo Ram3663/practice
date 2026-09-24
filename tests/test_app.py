@@ -1,16 +1,3 @@
-<<<<<<< HEAD
-from app import app
-
-
-def test_health_check():
-    app.config.update(TESTING=True)
-
-    with app.test_client() as client:
-        response = client.get("/health")
-
-    assert response.status_code == 200
-    assert response.get_json() == {"status": "ok"}
-=======
 import sqlite3
 
 import pytest
@@ -49,4 +36,3 @@ def test_task_lifecycle(client):
 def test_empty_task_is_ignored(client):
     client.post("/tasks", data={"title": "   "})
     assert b"No tasks yet" in client.get("/").data
->>>>>>> origin/main
