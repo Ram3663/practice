@@ -31,6 +31,19 @@
           <span class="task-count">{{ tasks|length }}</span>
         </div>
 
+        <form class="filter-form" method="get" action="{{ url_for('home') }}">
+          <label for="search">Search tasks</label>
+          <div class="filter-row">
+            <input id="search" name="q" type="search" value="{{ search_query }}" placeholder="Search by title">
+            <select name="status" aria-label="Filter tasks by status">
+              <option value="all"{% if status_filter == "all" %} selected{% endif %}>All tasks</option>
+              <option value="active"{% if status_filter == "active" %} selected{% endif %}>Active</option>
+              <option value="completed"{% if status_filter == "completed" %} selected{% endif %}>Completed</option>
+            </select>
+            <button type="submit">Filter</button>
+          </div>
+        </form>
+
         {% if tasks %}
           <ul class="task-list">
             {% for task in tasks %}
