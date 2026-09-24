@@ -4,7 +4,6 @@ from pathlib import Path
 
 from flask import Flask, g, jsonify, redirect, render_template, request, url_for
 
-
 app = Flask(__name__)
 app.config["DATABASE"] = Path(app.instance_path) / "tasks.db"
 
